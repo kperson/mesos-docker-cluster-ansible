@@ -1,0 +1,1 @@
+{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_dns"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}

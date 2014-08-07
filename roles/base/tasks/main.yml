@@ -1,0 +1,18 @@
+---
+- name: create install directory and lock directory
+  command: mkdir -p {{ install_dir }}/opt2
+
+- name: update apt-get
+  command: apt-get update
+  sudo: yes
+
+- name: install docker (latest)
+  shell: curl -s https://get.docker.io/ubuntu/ | sudo sh
+
+- name: install pip
+  apt: pkg=python-pip state=installed
+  sudo: yes
+
+- name: install deimos
+  pip: name=deimos
+  sudo: yes

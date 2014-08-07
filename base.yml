@@ -1,0 +1,7 @@
+---
+- hosts: provisions
+  sudo: no
+  roles:
+    - role: base
+    - role: zookeeper
+    - role: mesos

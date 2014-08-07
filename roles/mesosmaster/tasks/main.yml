@@ -1,0 +1,55 @@
+---
+- name: add mesos master file
+  template: src=mesos-master.conf.j2 dest=/etc/init/mesos-master.conf
+  sudo: yes
+
+- name: create marathon template file
+  template: src=marathon.conf.j2 dest=/etc/init/marathon.conf
+
+- name: create zookeeper id file
+  template: src=zooid.j2 dest=/var/lib/zookeeper/myid
+  sudo: yes
+
+- name: create zookeeper cluster file
+  template: src=zoo.cfg.j2 dest=/etc/zookeeper/conf/zoo.cfg
+  sudo: yes
+
+- name: switch zookeeper to automatic
+  command: rm /etc/init/zookeeper.override
+  sudo: yes
+  ignore_errors: yes
+
+- name: switch mesos-master to automatic
+  command: rm /etc/init/mesos-master.override
+  sudo: yes
+  ignore_errors: yes
+
+- name: switch mesos-slave to automatic
+  command: rm /etc/init/mesos-slave.override
+  sudo: yes
+  ignore_errors: yes
+
+- name: switch marathon to automatic
+  command: rm /etc/init/marathon.override
+  sudo: yes
+  ignore_errors: yes
+
+- name: start zookeeper
+  action: service name=zookeeper state=started
+  sudo: yes
+  ignore_errors: yes
+
+- name: start mesos master
+  action: service name=mesos-master state=started
+  ignore_errors: yes
+  sudo: yes
+
+- name: start mesos slave
+  action: service name=mesos-slave state=started
+  sudo: yes
+  ignore_errors: yes
+
+- name: start marathon master
+  action: service name=marathon state=started
+  ignore_errors: yes
+  sudo: yes

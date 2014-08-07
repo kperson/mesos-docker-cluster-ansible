@@ -1,0 +1,9 @@
+tickTime=2000
+initLimit=5
+syncLimit=2
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
+{% for host in groups['mesosmaster'] %}
+server.{{ zk_id }}={{ internal_host }}:2888:3888
+{% endfor %}

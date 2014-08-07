@@ -1,0 +1,5 @@
+---
+- hosts: mesosmaster
+  sudo: no
+  roles:
+    - role: mesosmaster

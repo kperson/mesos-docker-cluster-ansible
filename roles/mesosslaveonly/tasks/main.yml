@@ -1,0 +1,39 @@
+---
+- name: stop mesos master if running
+  command: stop mesos-master
+  ignore_errors: yes
+  sudo: yes
+
+- name: stop marathon master if running
+  command: stop marathon
+  ignore_errors: yes
+  sudo: yes
+
+- name: stop zookeeper if running
+  command: stop zookeeper
+  ignore_errors: yes
+  sudo: yes
+
+- name: switch zookeeper to manaual
+  copy: src=manual.txt dest=/etc/init/zookeeper.override
+  sudo: yes
+
+- name: switch mesos-master to manaual
+  copy: src=manual.txt dest=/etc/init/mesos-master.override
+  sudo: yes
+
+- name: switch marathon to manaual
+  copy: src=manual.txt dest=/etc/init/marathon.override
+  sudo: yes
+
+- name: switch mesos-slave to automatic
+  command: rm /etc/init/mesos-slave.override
+  sudo: yes
+  ignore_errors: yes
+
+
+
+- name: start mesos slave if not running
+  command: start mesos-slave
+  ignore_errors: yes
+  sudo: yes
