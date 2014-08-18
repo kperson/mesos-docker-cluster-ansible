@@ -27,10 +27,6 @@
   copy: src=isolation.txt dest=/etc/mesos-slave/isolation
   sudo: yes
 
-- name: add deimos config file
-  copy: src=isolation.txt dest=/etc/mesos-slave/isolation
-  sudo: yes
-
 - name: switch zookeeper to manaual
   copy: src=manual.txt dest=/etc/init/zookeeper.override
   sudo: yes

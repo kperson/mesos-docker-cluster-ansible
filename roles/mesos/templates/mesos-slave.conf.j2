@@ -7,4 +7,4 @@ description "mesos slave"
 start on stopped rc RUNLEVEL=[2345]
 respawn
 
-exec /usr/local/bin/mesos slave --master=zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --ip={{ internal_host }}
+exec /usr/local/bin/mesos slave --master=zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --ip={{ internal_host }} --hostname={{ internal_host }}  --containerizer_path=/usr/local/bin/deimos --isolation=external

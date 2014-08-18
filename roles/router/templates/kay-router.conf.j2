@@ -1,0 +1,12 @@
+# Ubuntu upstart file at /etc/init/kay-router.conf
+
+start on stopped rc RUNLEVEL=[2345]
+respawn
+
+exec /usr/bin/docker run -p 80:80 -p 443:443 --name kay-router -e SSH_PASSWORD=some_random_string -e NGINX_CONF_URL={{ nginx_conf_url }} kperson/nginx
+
+post-stop script
+  /usr/bin/docker kill kay-router || true
+  /usr/bin/docker rm kay-router || true
+  sleep 1
+end script

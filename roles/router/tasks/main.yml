@@ -1,0 +1,9 @@
+---
+- name: add mesos master file
+  template: src=kay-router.conf.j2 dest=/etc/init/kay-router.conf
+  sudo: yes
+
+- name: run
+  shell: start kay-router || restart kay-router
+  sudo: yes
+  ignore_errors: yes
