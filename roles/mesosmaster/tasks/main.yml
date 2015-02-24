@@ -3,6 +3,12 @@
   template: src=mesos-master.conf.j2 dest=/etc/init/mesos-master.conf
   sudo: yes
 
+- name: download marathon
+  get_url: url=http://downloads.mesosphere.com/marathon/v0.7.6/marathon-0.7.6.tgz dest={{ install_dir }}/marathon-0.7.6.tgz
+
+- name: unzip marathon
+  command: tar xzf marathon-0.7.6.tgz chdir={{ install_dir }} creates={{ install_dir }}/marathon-0.7.6
+
 - name: create marathon template file
   template: src=marathon.conf.j2 dest=/etc/init/marathon.conf
 
@@ -49,7 +55,21 @@
   sudo: yes
   ignore_errors: yes
 
-- name: start marathon master
-  action: service name=marathon state=started
-  ignore_errors: yes
-  sudo: yes
+#- name: start marathon master
+#  action: service name=marathon state=started
+#  ignore_errors: yes
+#  sudo: yes
+
+#- name: download chronos
+#  get_url: url=http://downloads.mesosphere.io/chronos/chronos-2.1.0_mesos-0.14.0-rc4.tgz dest={{ install_dir }}/chronos-2.1.0_mesos.tgz
+
+#- name: unzip chronos
+#  command: tar xzf chronos-2.1.0_mesos.tgz chdir={{ install_dir }} creates={{ install_dir }}/chronos
+
+#- name: create chronos template file
+#  template: src=chronos.conf.j2 dest=/etc/init/chronos.conf
+
+#- name: start chronos master
+#  action: service name=chronos state=started
+#  ignore_errors: yes
+#  sudo: yes

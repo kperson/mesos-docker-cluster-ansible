@@ -6,13 +6,39 @@
   command: apt-get update
   sudo: yes
 
+- name: install aufs filesystem support
+  shell: apt-get install linux-image-extra-`uname -r`
+  sudo: yes
+
 - name: install docker (latest)
   shell: curl -s https://get.docker.io/ubuntu/ | sudo sh
+
+- name: add docker config
+  template: src=docker.j2 dest=/etc/default/docker
+  notify: restart docker
+
 
 - name: install pip
   apt: pkg=python-pip state=installed
   sudo: yes
 
-- name: install deimos
-  pip: name=deimos
+- name: install haproxy
+  apt: pkg=haproxy state=present
   sudo: yes
+
+- name: add haproxy config
+  template: src=haproxy.j2 dest=/etc/default/haproxy
+
+- name: add haproxy mararthon file
+  template: src=haproxymarathon.j2 dest=/etc/haproxy-marathon-bridge/marathons
+
+- name: download marathon cron
+  get_url: url=https://raw.githubusercontent.com/mesosphere/marathon/master/bin/haproxy-marathon-bridge dest={{ install_dir }}/haproxy-marathon-bridge
+  notify: install cron
+
+- name: make cron executable
+  shell: chmod +x {{ install_dir }}/haproxy-marathon-bridge
+
+- name: start haproxy
+  service: name=haproxy state=started
+  ignore_errors: true

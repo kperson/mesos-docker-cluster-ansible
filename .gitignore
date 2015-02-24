@@ -2,3 +2,5 @@ digitalocean
 hosts
 linode
 aws
+.DS_Store
+target/

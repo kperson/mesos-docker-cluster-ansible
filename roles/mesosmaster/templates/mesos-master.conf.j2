@@ -7,4 +7,4 @@ description "mesos master"
 start on stopped rc RUNLEVEL=[2345]
 respawn
 
-exec /usr/local/sbin/mesos-master --work_dir=/var/lib/mesos --ip={{ inventory_hostname }} --quorum=1 --zk=zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos
+exec /usr/sbin/mesos-master  --log_dir=/var/log/mesos --work_dir=/var/lib/mesos --ip={{ inventory_hostname }} --quorum=1 --zk=zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --logging_level=INFO

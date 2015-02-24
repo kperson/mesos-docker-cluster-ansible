@@ -1,0 +1,6 @@
+---
+- name:  restart docker
+  shell: restart docker
+
+- name:  install cron
+  shell: cd {{ install_dir }} && ./haproxy-marathon-bridge install_cronjob

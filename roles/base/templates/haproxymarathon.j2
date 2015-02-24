@@ -1,0 +1,3 @@
+{% for host in groups['mesosmaster'] %}
+{{ hostvars[host]["internal_host"]  }}:8080
+{% endfor %}

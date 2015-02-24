@@ -1,9 +1,13 @@
 ---
 - name: download mesos
-  get_url: url=http://downloads.mesosphere.io/master/ubuntu/14.04/mesos_0.19.0~ubuntu14.04%2B1_amd64.deb dest={{ install_dir }}/mesos.deb
+  get_url: url=http://downloads.mesosphere.io/master/ubuntu/14.04/mesos_0.21.1-1.1.ubuntu1404_amd64.deb dest={{ install_dir }}/mesos-0.21.1.deb
 
 - name: start create mesos upstart
-  shell: dpkg -i {{ install_dir }}/mesos.deb;sudo touch {{ install_dir }}/opt2/mesos-deb.init creates={{ install_dir }}/opt2/mesos-deb.init
+  shell: dpkg -i {{ install_dir }}/mesos-0.21.1.deb;sudo touch {{ install_dir }}/opt2/mesos-deb-0.21.1.init creates={{ install_dir }}/opt2/mesos-deb-0.21.1.init
+  sudo: yes
+
+- name: fix apt-get
+  shell: apt-get -f -y install
   sudo: yes
 
 - name: mkdir mesos-slave directory
@@ -18,14 +22,6 @@
 
 - name: mkdir mesos-slave directory
   command: mkdir -p /etc/mesos-slave
-
-- name: add deimos containerizer for mesos
-  copy: src=deimos.cfg dest=/etc/deimos.cfg
-  sudo: yes
-
-- name: add deimos slave isolation for mesos
-  copy: src=isolation.txt dest=/etc/mesos-slave/isolation
-  sudo: yes
 
 - name: switch zookeeper to manaual
   copy: src=manual.txt dest=/etc/init/zookeeper.override
@@ -42,9 +38,3 @@
 - name: switch marathon to manaual
   copy: src=manual.txt dest=/etc/init/marathon.override
   sudo: yes
-
-- name: download marathon
-  get_url: url=http://downloads.mesosphere.io/marathon/marathon-0.6.0/marathon-0.6.0.tgz dest={{ install_dir }}/marathon-0.6.0.tgz
-
-- name: unzip marathon
-  command: tar xzf marathon-0.6.0.tgz chdir={{ install_dir }} creates={{ install_dir }}/marathon-0.6.0

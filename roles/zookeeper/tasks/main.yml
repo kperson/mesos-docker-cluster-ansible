@@ -3,21 +3,6 @@
   apt: pkg=openjdk-7-jdk state=present
   sudo: yes
 
-- name: install scala
-  apt: pkg=scala state=present
-  sudo: yes
-
-- name: download sbt
-  get_url: url=http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt//0.13.1/sbt.deb dest={{ install_dir }}/sbt.deb
-
-- name: install sbt package
-  shell: dpkg -i {{ install_dir }}/sbt.deb;touch {{ install_dir }}/opt2/sbt-deb.init creates={{ install_dir }}/opt2/sbt-deb.init
-  sudo: yes
-
-- name: udpate apt-get
-  shell: apt-get update
-  sudo: yes
-
 - name: install zookeeper
   apt: pkg=zookeeperd state=present
   sudo: yes

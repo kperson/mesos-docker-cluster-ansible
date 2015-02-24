@@ -3,4 +3,3 @@
   sudo: no
   roles:
     - role: mesosmaster
-    - role: router
