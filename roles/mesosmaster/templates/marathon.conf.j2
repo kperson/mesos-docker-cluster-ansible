@@ -3,4 +3,4 @@
 start on stopped rc RUNLEVEL=[2345]
 respawn
 
-exec {{ install_dir }}/marathon-0.7.6/bin/start --master zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"]  }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --zk_hosts {% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/marathon --event_subscriber http_callback  --task_launch_timeout 300000
+exec {{ install_dir }}/marathon-0.7.6/bin/start --master zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"]  }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --zk_hosts {% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %}/marathon --event_subscriber http_callback  --task_launch_timeout 600000

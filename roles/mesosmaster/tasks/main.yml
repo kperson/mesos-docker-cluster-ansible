@@ -11,6 +11,7 @@
 
 - name: create marathon template file
   template: src=marathon.conf.j2 dest=/etc/init/marathon.conf
+  sudo: yes
 
 - name: create zookeeper id file
   template: src=zooid.j2 dest=/var/lib/zookeeper/myid
@@ -21,22 +22,22 @@
   sudo: yes
 
 - name: switch zookeeper to automatic
-  command: rm /etc/init/zookeeper.override
+  shell: rm /etc/init/zookeeper.override
   sudo: yes
   ignore_errors: yes
 
 - name: switch mesos-master to automatic
-  command: rm /etc/init/mesos-master.override
+  shell: rm /etc/init/mesos-master.override
   sudo: yes
   ignore_errors: yes
 
 - name: switch mesos-slave to automatic
-  command: rm /etc/init/mesos-slave.override
+  shell: rm /etc/init/mesos-slave.override
   sudo: yes
   ignore_errors: yes
 
 - name: switch marathon to automatic
-  command: rm /etc/init/marathon.override
+  shell: rm /etc/init/marathon.override
   sudo: yes
   ignore_errors: yes
 
@@ -55,21 +56,7 @@
   sudo: yes
   ignore_errors: yes
 
-#- name: start marathon master
-#  action: service name=marathon state=started
-#  ignore_errors: yes
-#  sudo: yes
-
-#- name: download chronos
-#  get_url: url=http://downloads.mesosphere.io/chronos/chronos-2.1.0_mesos-0.14.0-rc4.tgz dest={{ install_dir }}/chronos-2.1.0_mesos.tgz
-
-#- name: unzip chronos
-#  command: tar xzf chronos-2.1.0_mesos.tgz chdir={{ install_dir }} creates={{ install_dir }}/chronos
-
-#- name: create chronos template file
-#  template: src=chronos.conf.j2 dest=/etc/init/chronos.conf
-
-#- name: start chronos master
-#  action: service name=chronos state=started
-#  ignore_errors: yes
-#  sudo: yes
+- name: start marathon master
+  action: service name=marathon state=started
+  ignore_errors: yes
+  sudo: yes

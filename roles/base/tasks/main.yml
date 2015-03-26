@@ -1,4 +1,48 @@
 ---
+
+- name: install ufw
+  apt: pkg=ufw state=present
+  sudo: yes
+
+#- name: enable ufw
+#  ufw: state=enabled policy=deny
+#  sudo: yes
+
+
+#- name: deny port 1:65535 to global
+#  ufw: rule=deny port=1:65535 proto=tcp
+#  sudo: yes
+
+#- name: allow port 8080 (tmp)
+#  ufw: rule=deny port=8080 proto=tcp
+#  sudo: yes
+
+#- name: allow port 5050 (tmp)
+#  ufw: rule=deny port=5050 proto=tcp
+#  sudo: yes
+
+#- name: allow port 1:65535 to local
+#  ufw: rule=allow port=1:65535 proto=tcp src={{ item }}
+#  with_items: groups['all']
+#  sudo: yes
+
+#- name: allow port 22
+#  ufw: rule=allow port=22 proto=tcp
+#  sudo: yes
+
+#- name: allow port 443
+#  ufw: rule=allow port=443 proto=tcp
+#  sudo: yes
+
+#- name: allow port 80
+#  ufw: rule=allow port=80 proto=tcp
+#  sudo: yes
+
+#- name: allow port 31000
+#  ufw: rule=allow port=31000 proto=tcp
+#  sudo: yes
+
+
 - name: create install directory and lock directory
   command: mkdir -p {{ install_dir }}/opt2
 
@@ -6,17 +50,23 @@
   command: apt-get update
   sudo: yes
 
-- name: install aufs filesystem support
-  shell: apt-get install linux-image-extra-`uname -r`
-  sudo: yes
-
 - name: install docker (latest)
   shell: curl -s https://get.docker.io/ubuntu/ | sudo sh
+
+- cron: name="stop unsed docker containers" minute="30" hour="11" job="docker rm $(docker ps -a -q)"
+  sudo: yes
+
+- cron: name="clean docker" minute="0" hour="12" job="docker images -q --filter "dangling=true" | xargs docker rmi"
+  sudo: yes
 
 - name: add docker config
   template: src=docker.j2 dest=/etc/default/docker
   notify: restart docker
+  sudo: yes
 
+- name: pull tallyho
+  command: docker pull kperson/tallyho
+  sudo: yes
 
 - name: install pip
   apt: pkg=python-pip state=installed
@@ -28,9 +78,15 @@
 
 - name: add haproxy config
   template: src=haproxy.j2 dest=/etc/default/haproxy
+  sudo: yes
+
+- name: mkdir mararthon bridge directory
+  shell: mkdir -p /etc/haproxy-marathon-bridge
+  sudo: yes
 
 - name: add haproxy mararthon file
   template: src=haproxymarathon.j2 dest=/etc/haproxy-marathon-bridge/marathons
+  sudo: yes
 
 - name: download marathon cron
   get_url: url=https://raw.githubusercontent.com/mesosphere/marathon/master/bin/haproxy-marathon-bridge dest={{ install_dir }}/haproxy-marathon-bridge
@@ -38,7 +94,9 @@
 
 - name: make cron executable
   shell: chmod +x {{ install_dir }}/haproxy-marathon-bridge
+  sudo: yes
 
 - name: start haproxy
   service: name=haproxy state=started
   ignore_errors: true
+  sudo: yes

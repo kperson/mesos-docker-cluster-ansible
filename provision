@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ansible-playbook -i "$1" base.yml
+ansible-playbook -i "$1" mesos-master.yml
+ansible-playbook -i "$1" mesos-slave-only.yml
+ansible-playbook -i "$1" base.yml

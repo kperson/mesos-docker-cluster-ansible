@@ -16,25 +16,17 @@
 
 - name: create mesos zookeeper list
   template: src=zookeeper-hosts.j2 dest=/etc/mesos/zk
+  sudo: yes
 
 - name: mkdir mesos url directory
   command: mkdir -p /etc/mesos
+  sudo: yes
 
 - name: mkdir mesos-slave directory
   command: mkdir -p /etc/mesos-slave
-
-- name: switch zookeeper to manaual
-  copy: src=manual.txt dest=/etc/init/zookeeper.override
   sudo: yes
 
-- name: switch mesos-master to manaual
-  copy: src=manual.txt dest=/etc/init/mesos-master.override
-  sudo: yes
-
-- name: switch mesos-slave to manaual
-  copy: src=manual.txt dest=/etc/init/mesos-slave.override
-  sudo: yes
-
-- name: switch marathon to manaual
-  copy: src=manual.txt dest=/etc/init/marathon.override
+- name: start haproxy
+  service: name=haproxy state=started
+  ignore_errors: true
   sudo: yes

@@ -31,7 +31,6 @@
   sudo: yes
   ignore_errors: yes
 
-
 - name: start mesos slave if not running
   command: start mesos-slave
   ignore_errors: yes

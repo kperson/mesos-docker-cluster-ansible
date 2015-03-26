@@ -2,5 +2,7 @@ digitalocean
 hosts
 linode
 aws
+gce
+forward
 .DS_Store
 target/

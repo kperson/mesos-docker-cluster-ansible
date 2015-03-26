@@ -3,4 +3,4 @@
 start on stopped rc RUNLEVEL=[2345]
 respawn
 
-exec {{ install_dir }}/chronos/bin/start-chronos.bash --master zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"]  }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --zk_hosts {% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %} --http_port 8081
+exec sudo {{ install_dir }}/chronos/bin/start-chronos.bash --master zk://{% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"]  }}:2181{% if not loop.last %},{% endif %}{% endfor %}/mesos --zk_hosts {% for host in groups['mesosmaster'] %}{{ hostvars[host]["internal_host"] }}:2181{% if not loop.last %},{% endif %}{% endfor %} --http_port 8081
